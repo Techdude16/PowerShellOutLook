@@ -1,4 +1,21 @@
-# Import the Active Directory module
+
+
+# Check if the Az module is available
+$azModule = Get-Module -Name Az -ListAvailable
+
+if ($azModule -eq $null) {
+    # The Az module is not installed, proceed with installation
+    Write-Host "Azure PowerShell module (Az) is not installed. Installing now..." -ForegroundColor Green
+    
+    # Install the Az module from the PowerShell Gallery
+    Install-Module -Name Az -Scope CurrentUser -AllowClobber -Force
+
+    Write-Host "Azure PowerShell module (Az) installed successfully. Please wait.." -ForegroundColor Yellow -Verbose
+} else {
+    # The Az module is already installed
+    Write-Host "Azure PowerShell module (Az) is already installed." -ForegroundColor Red
+}
+
 Import-Module ActiveDirectory
 
 # Function to create an email signature
@@ -47,7 +64,7 @@ function Create-EmailSignature {
 $currentUser = $env:USERNAME
 
 # Perform the AD query to get user details
-$userDetails = Get-ADUser -Identity $currentUser -Properties DisplayName, Title, Department, Company, StreetAddress, City, State, PostalCode, mail
+$userDetails = Get-ADUser -Identity jdebla01 -Properties DisplayName, Title, Department, Company, StreetAddress, City, State, PostalCode, mail, physicalDeliveryOfficeName, Office
 
 # Populate the $UserProperties hashtable with the required information
 $UserProperties = @{
